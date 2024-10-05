@@ -6,9 +6,6 @@ process:
 port:
   tcp:8080:
     listening: true
-http:
-  http://127.0.0.1:8080/sabnzbd:
-    status: 200
 file:
   /usr/local/bin/python:
     exists: true
