@@ -1,7 +1,7 @@
 FROM docker.io/library/python:3.12-alpine
 
 ARG TARGETPLATFORM
-ARG VERSION
+ARG VERSION=4.3.3
 ARG CHANNEL
 
 ENV \
