@@ -21,6 +21,6 @@ exec \
     /usr/local/bin/python \
         /app/SABnzbd.py \
         --browser 0 \
-        --server 127.0.0.1:${SABNZBD__PORT:-8080} \
+        --server 0.0.0.0:${SABNZBD__PORT:-8080} \
         --config-file /config/sabnzbd.ini \
         "$@"
