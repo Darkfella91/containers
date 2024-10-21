@@ -67,6 +67,9 @@ jobs:
         shell: bash
         run: pip install --requirement requirements.txt && pip freeze
 
+      - name: Set executable permission for latest.sh
+        run: chmod +x ./apps/theme-park/ci/latest.sh
+
       - name: Prepare Matrices
         id: prepare-matrices
         env:
