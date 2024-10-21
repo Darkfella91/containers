@@ -34,4 +34,4 @@ USER nginx
 WORKDIR /usr/share/nginx/html
 
 LABEL org.opencontainers.image.source="https://github.com/themepark-dev/theme.park"
-
+LABEL built by Darkfella
