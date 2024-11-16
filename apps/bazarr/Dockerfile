@@ -9,7 +9,10 @@ ARG CHANNEL
 # Set environment variables
 ENV PIP_NO_CACHE_DIR=1 \
     LANG=C.UTF-8 \
-    BAZARR__PORT=6767
+    BAZARR__PORT=6767 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 # Install system dependencies
@@ -45,8 +48,6 @@ RUN \
   curl -fsSL -o /tmp/bazarr.zip \
     "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
   unzip -q /tmp/bazarr.zip -d /app \
-  && \
-  rm -rf /app/bin \
   && \
   printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/Darkfella91)\n" "${VERSION}" > /app/package_info \
   echo "**** Set up virtual environment and install Python dependencies ****" && \
