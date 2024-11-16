@@ -3,7 +3,6 @@
 process:
   python:
     running: false
-  # Check if Python is running, should be true after Bazarr starts
   bazarr:
     running: true
 
@@ -14,18 +13,14 @@ file:
     exists: true
 
 port:
-  listening: 6767
+  tcp:6767:
+    listening: true
 
 http:
-  # Assuming Bazarr has a health endpoint or default index page
-  # Replace with an actual URL if Bazarr has a health-check endpoint
-  url: http://localhost:6767
-  status: 200
-  # Optional: To test health more thoroughly, you can check the content
-  # body_contains: "Bazarr"
+  http://localhost:6767:
+    status: 200
 
 docker:
-  # Make sure the container is up and healthy after starting it
   container:
     name: bazarr
     running: true
