@@ -49,6 +49,8 @@ RUN \
         libxml2-dev \
         libxslt-dev \
     && \
+    chmod +x /usr/bin/catatonit \
+    && \
     curl -fsSL -o /tmp/app.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" \
     && unzip -q /tmp/app.zip -d /app/bin \
     && \
