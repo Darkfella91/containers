@@ -57,7 +57,7 @@ RUN \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/v1.4.5/postgres-requirements.txt" && \
   echo "**** Install requirements ****" && \
-  pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
+  pipx install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
         --requirement /app/bazarr/bin/requirements.txt \
         --requirement /app/bazarr/bin/postgres-requirements.txt && \
   printf "Linuxserver.io version: v1.4.5\nBuild-date: 2024" > /build_version && \
