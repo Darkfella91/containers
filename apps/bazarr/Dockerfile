@@ -1,74 +1,62 @@
-FROM docker.io/library/python:3.12-alpine
+# Use the official Alpine Linux base image
+FROM alpine:3.20.3@sha256:1e42bbe2508154c9126d48c2b8a75420c3544343bf86fd041fb7527e017a4b4a
 
-ARG TARGETPLATFORM
-ARG VERSION
-ARG CHANNEL
-
-ENV \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_ROOT_USER_ACTION=ignore \
+# Set environment variables
+ENV BAZARR_VERSION=v1.4.5 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1
+    LANG=C.UTF-8 \
+    USERNAME=nobody \
+    BAZARR__PORT=6767
 
-ENV UMASK="0002" \
-    TZ="Etc/UTC"
-
-ENV BAZARR__PORT=6767
-
-USER root
 WORKDIR /app
-
-#hadolint ignore=DL3018,DL3013
+# Install system dependencies
 RUN \
-    apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
-        coreutils \
-        curl \
-        ffmpeg \
-        jo \
-        jq \
-        libxml2 \
-        libxslt \
-        mediainfo \
-        nano \
-        trurl \
-        tzdata \
-        unzip \
-        libpq \
-    && \
-    apk add --no-cache --virtual .build-deps \
-        build-base \
-        cargo \
-        libffi-dev \
-        libpq-dev \
-        libxml2-dev \
-        libxslt-dev \
-    && \
-    curl -fsSL -o /tmp/app.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" \
-    && unzip -q /tmp/app.zip -d /app/bin \
-    && \
-    rm -rf /app/bin/bin \
-    && \
-    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${VERSION}" > /app/package_info \
-    && pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-        --requirement /app/bin/requirements.txt \
-        --requirement /app/bin/postgres-requirements.txt \
-    && chown -R root:root /app && chmod -R 755 /app \
-    && apk del --purge .build-deps \
-    && rm -rf /root/.cache /root/.cargo /tmp/*
-
-COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
-COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
-RUN chmod 555 /usr/local/bin && chmod 555 /entrypoint.sh
+  echo "**** Install build dependencies ****" && \
+  apk add --no-cache --virtual=build-dependencies \
+    build-base \
+    cargo \
+    libffi-dev \
+    libpq-dev \
+    libxml2-dev \
+    libxslt-dev \
+    python3-dev && \
+  echo "**** Install runtime dependencies ****" && \
+  apk add --no-cache \
+    ffmpeg \
+    libxml2 \
+    libxslt \
+    mediainfo \
+    python3 \
+    catatonit && \
+  echo "**** Create Bazarr directory and user ****" && \
+  mkdir -p /app/bazarr && \
+  echo "**** Download Bazarr ****" && \
+  curl -L -o /tmp/bazarr.zip \
+    "https://github.com/morpheus65535/bazarr/releases/latest/download/bazarr.zip" && \
+  unzip /tmp/bazarr.zip -d /app/bazarr && \
+  rm -rf /tmp/bazarr.zip && \
+  echo "**** Set up virtual environment and install Python dependencies ****" && \
+  python3 -m venv /app/bazarr/venv && \
+  . /app/bazarr/venv/bin/activate && \
+  pip install --upgrade pip wheel && \
+  pip install --no-cache-dir \
+    -r /app/bazarr/requirements.txt \
+    -r /app/bazarr/postgres-requirements.txt && \
+  deactivate && \
+  echo "**** Clean up ****" && \
+  apk del --purge build-dependencies && \
+  rm -rf /var/cache/apk/*
 
 USER nobody:nogroup
+WORKDIR /config
 VOLUME ["/config"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
+# Expose Bazarr's default port
+EXPOSE 6767
 
-LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
+COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
+
+# Entrypoint to use Catatonit for process management
+ENTRYPOINT ["/usr/bin/catatonit", "--"]
+# Command to run Bazarr
+CMD ["/app/bazarr/venv/bin/python3", "/app/bazarr/bazarr.py", "--no-update", "--config", "/config"]
