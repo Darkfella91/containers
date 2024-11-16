@@ -36,7 +36,7 @@ RUN \
   mkdir -p /app/bazarr && \
   echo "**** Download Bazarr ****" && \
   curl -fsSL -o /tmp/bazarr.zip \
-    "https://github.com/morpheus65535/bazarr/releases/latest/download/v${VERSION}/bazarr.zip" && \
+    "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
   unzip /tmp/bazarr.zip -d /app/bazarr && \
   rm -rf /tmp/bazarr.zip && \
   echo "**** Set up virtual environment and install Python dependencies ****" && \
