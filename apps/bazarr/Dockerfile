@@ -12,8 +12,7 @@ ENV PIP_NO_CACHE_DIR=1 \
     BAZARR__PORT=6767 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    REQUESTS_CA_BUNDLE=/app/venv/lib/python3.12/site-packages/certifi/cacert.pem
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 
 WORKDIR /app
@@ -63,6 +62,8 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     echo "**** Setting proper ownership and permissions for /app ****" && \
     chown -R root:root /app && \
     chmod -R 755 /app
+
+ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python3.12/site-packages/certifi/cacert.pem
 
 USER nobody:nogroup
 
