@@ -14,8 +14,7 @@ file:
     exists: true
 
 port:
-  6767:
-    listen: true
+  listening: 6767
 
 http:
   # Assuming Bazarr has a health endpoint or default index page
