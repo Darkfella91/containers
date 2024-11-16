@@ -1,11 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
 
-process:
-  python:
-    running: false
-  bazarr:
-    running: true
-
 file:
   /app/bazarr/venv/bin/python3:
     exists: true
