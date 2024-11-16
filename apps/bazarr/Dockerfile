@@ -15,6 +15,15 @@ ENV TZ="Etc/UTC"
 ENV BAZARR__PORT=6767
 ENV UMASK="0002"
 
+ENV \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_ROOT_USER_ACTION=ignore \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
+    CRYPTOGRAPHY_DONT_BUILD_RUST=1
+
 RUN \
   echo "**** install build packages ****" && \
   apk add --no-cache --virtual=build-dependencies \
@@ -51,7 +60,6 @@ RUN \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/${BAZARR_VERSION}/postgres-requirements.txt" && \
   echo "**** Install requirements ****" && \
-  python3 -m venv /lsiopy && \
   pip install -U --no-cache-dir \
     pip \
     wheel && \
