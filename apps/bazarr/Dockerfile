@@ -41,7 +41,6 @@ RUN \
     ca-certificates \
     catatonit && \
   echo "**** Create Bazarr directory and user ****" && \
-  mkdir -p /app/bazarr && \
   echo "**** Download Bazarr ****" && \
   curl -fsSL -o /tmp/bazarr.zip \
     "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
@@ -72,4 +71,4 @@ COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unra
 # Entrypoint to use Catatonit for process management
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 # Command to run Bazarr
-CMD ["/app/bazarr/venv/bin/python3", "/app/bazarr/bazarr.py", "--no-update", "--config", "/config"]
+CMD ["/app/bazarr/venv/bin/python3", "/app/bazarr.py", "--no-update", "--config", "/config"]
