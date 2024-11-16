@@ -1,74 +1,76 @@
-FROM docker.io/library/python:3.12-alpine
+FROM ghcr.io/linuxserver/unrar:latest AS unrar
 
-ARG TARGETPLATFORM
+FROM docker.io/library/alpine:3.20@sha256:1e42bbe2508154c9126d48c2b8a75420c3544343bf86fd041fb7527e017a4b4a
+
+# set version label
+ARG BUILD_DATE
 ARG VERSION
-ARG CHANNEL
+ARG BAZARR_VERSION
+LABEL build_version="DarkfellaNET version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="Darkfella"
+LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
+# hard set UTC in case the user does not define it
 
-ENV \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_ROOT_USER_ACTION=ignore \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1
-
-ENV UMASK="0002" \
-    TZ="Etc/UTC"
-
+ENV TZ="Etc/UTC"
 ENV BAZARR__PORT=6767
+ENV UMASK="0002"
 
-USER root
-WORKDIR /app
-
-#hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
-        coreutils \
-        curl \
-        ffmpeg \
-        jo \
-        jq \
-        libxml2 \
-        libxslt \
-        mediainfo \
-        nano \
-        trurl \
-        tzdata \
-        unzip \
-        libpq \
-    && \
-    apk add --no-cache --virtual .build-deps \
-        build-base \
-        cargo \
-        libffi-dev \
-        libpq-dev \
-        libxml2-dev \
-        libxslt-dev \
-    && \
-    curl -fsSL -o /tmp/app.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" \
-    && unzip -q /tmp/app.zip -d /app/bin \
-    && \
-    rm -rf /app/bin/bin \
-    && \
-    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[onedr0p](https://github.com/onedr0p)\n" "${VERSION}" > /app/package_info \
-    && pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-        --requirement /app/bin/requirements.txt \
-        --requirement /app/bin/postgres-requirements.txt \
-    && chown -R root:root /app && chmod -R 755 /app \
-    && apk del --purge .build-deps \
-    && rm -rf /root/.cache /root/.cargo /tmp/*
+  echo "**** install build packages ****" && \
+  apk add --no-cache --virtual=build-dependencies \
+    build-base \
+    cargo \
+    libffi-dev \
+    libpq-dev \
+    libxml2-dev \
+    libxslt-dev \
+    python3-dev && \
+  echo "**** install packages ****" && \
+  apk add --no-cache \
+    ffmpeg \
+    libxml2 \
+    libxslt \
+    mediainfo \
+    python3 && \
+  echo "**** install bazarr ****" && \
+  mkdir -p \
+    /app/bazarr/bin && \
+  if [ -z ${BAZARR_VERSION+x} ]; then \
+    BAZARR_VERSION=$(curl -sX GET "https://api.github.com/repos/morpheus65535/bazarr/releases/latest" \
+    | awk '/tag_name/{print $4;exit}' FS='[""]'); \
+  fi && \
+  curl -o \
+    /tmp/bazarr.zip -L \
+    "https://github.com/morpheus65535/bazarr/releases/download/${BAZARR_VERSION}/bazarr.zip" && \
+  unzip \
+    /tmp/bazarr.zip -d \
+    /app/bazarr/bin && \
+  rm -Rf /app/bazarr/bin/bin && \
+  echo "UpdateMethod=docker\nBranch=master\nPackageVersion=${VERSION}\nPackageAuthor=DarkfellaNET" > /app/bazarr/package_info && \
+  curl -o \
+    /app/bazarr/bin/postgres-requirements.txt -L \
+    "https://raw.githubusercontent.com/morpheus65535/bazarr/${BAZARR_VERSION}/postgres-requirements.txt" && \
+  echo "**** Install requirements ****" && \
+  python3 -m venv /lsiopy && \
+  pip install -U --no-cache-dir \
+    pip \
+    wheel && \
+  pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
+    -r /app/bazarr/bin/requirements.txt \
+    -r /app/bazarr/bin/postgres-requirements.txt && \
+  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
+  echo "**** clean up ****" && \
+  apk del --purge \
+    build-dependencies && \
+  rm -rf \
+    $HOME/.cache \
+    $HOME/.cargo \
+    /tmp/*
 
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
-COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
+COPY --from=unrar /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup
-WORKDIR /config
-VOLUME ["/config"]
+VOLUME /config
 
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
-
-LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
