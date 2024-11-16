@@ -44,7 +44,7 @@ RUN \
     libxml2 \
     libxslt \
     mediainfo \
-    python3 && \
+    python3  \
     py3-pip && \
   echo "**** install bazarr ****" && \
   mkdir -p \
