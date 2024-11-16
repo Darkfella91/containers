@@ -55,8 +55,6 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     /app/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bin/requirements.txt \
     -r /app/bin/postgres-requirements.txt && \
-    echo "Dynamically setting REQUESTS_CA_BUNDLE to: $REQUESTS_CA_BUNDLE" && \
-    PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
     echo "**** Cleaning up build dependencies and unnecessary files ****" && \
     # Clean up unnecessary dependencies and temporary files
     apk del --purge build-base cargo libffi-dev libpq-dev libxml2-dev libxslt-dev python3-dev unzip && \
@@ -65,6 +63,7 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     chown -R root:root /app && \
     chmod -R 755 /app
 
+RUN PYTHON_VERSION=$(/app/venv/bin/python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
 ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem
 
 USER nobody:nogroup
