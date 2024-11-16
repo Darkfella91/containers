@@ -27,6 +27,7 @@ RUN \
     python3-dev && \
   echo "**** install packages ****" && \
   apk add --no-cache \
+    curl \
     ffmpeg \
     libxml2 \
     libxslt \
