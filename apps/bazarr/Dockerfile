@@ -51,8 +51,8 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     python3 -m venv /app/venv && \
     /app/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
     /app/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-    -r /app/requirements.txt \
-    -r /app/postgres-requirements.txt && \
+    -r /app/bin/requirements.txt \
+    -r /app/bin/postgres-requirements.txt && \
     echo "**** Cleaning up build dependencies and unnecessary files ****" && \
     # Clean up unnecessary dependencies and temporary files
     apk del --purge build-base cargo libffi-dev libpq-dev libxml2-dev libxslt-dev python3-dev unzip && \
