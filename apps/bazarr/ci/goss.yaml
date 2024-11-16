@@ -5,11 +5,3 @@ file:
     exists: true
   /usr/bin/unrar:
     exists: true
-
-port:
-  tcp:6767:
-    listening: true
-
-http:
-  http://localhost:6767:
-    status: 200
