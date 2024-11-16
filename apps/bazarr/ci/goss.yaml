@@ -1,10 +1,32 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+
 process:
+  # Check if Python is running (usually for a Python-based service like Bazarr)
   python:
     running: true
+  # Check if Bazarr is running, replace with the actual process name if different
+  bazarr:
+    running: true
+
 file:
-  /usr/local/bin/python:
+  # Check if Python 3 binary exists
+  /usr/local/bin/python3:
     exists: true
+  # Ensure Python is correctly installed and points to python3
+  /usr/bin/python:
+    exists: true
+    mode: "0755"
+  # Ensure unrar binary exists (since it was copied into the image)
   /usr/bin/unrar:
     exists: true
+    mode: "0755"
+  # Ensure the Bazarr binary is correctly installed
+  /app/bazarr/bin/bazarr.py:
+    exists: true
+    mode: "0755"
+
+# Optionally, check if specific directories exist (for example, the config folder)
+directory:
+  /config:
+    exists: true
+    mode: "0755"
