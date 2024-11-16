@@ -61,10 +61,10 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     rm -rf /root/.cache /root/.cargo /tmp/* && \
     echo "**** Setting proper ownership and permissions for /app ****" && \
     chown -R root:root /app && \
-    chmod -R 755 /app
-
-RUN PYTHON_VERSION=$(/app/venv/bin/python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
-ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem
+    chmod -R 755 /app && \
+    PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
+    echo "Dynamically setting REQUESTS_CA_BUNDLE" && \
+    echo "REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem" >> /etc/environment
 
 USER nobody:nogroup
 
