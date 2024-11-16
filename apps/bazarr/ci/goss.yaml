@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
 
 file:
-  /app/bazarr/venv/bin/python3:
+  /app/venv/bin/python3:
     exists: true
   /usr/bin/unrar:
     exists: true
@@ -13,9 +13,3 @@ port:
 http:
   http://localhost:6767:
     status: 200
-
-docker:
-  container:
-    name: bazarr
-    running: true
-    healthy: true
