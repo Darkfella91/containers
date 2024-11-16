@@ -12,7 +12,8 @@ ENV PIP_NO_CACHE_DIR=1 \
     BAZARR__PORT=6767 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    REQUESTS_CA_BUNDLE=/app/venv/lib/python3.12/site-packages/certifi/cacert.pem
 
 
 WORKDIR /app
@@ -61,10 +62,7 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     rm -rf /root/.cache /root/.cargo /tmp/* && \
     echo "**** Setting proper ownership and permissions for /app ****" && \
     chown -R root:root /app && \
-    chmod -R 755 /app && \
-    PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
-    echo "Dynamically setting REQUESTS_CA_BUNDLE" && \
-    echo "REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem" >> /etc/environment
+    chmod -R 755 /app
 
 USER nobody:nogroup
 
