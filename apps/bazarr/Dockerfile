@@ -27,6 +27,7 @@ RUN \
     libxslt \
     mediainfo \
     python3 \
+    curl \
     catatonit && \
   echo "**** Create Bazarr directory and user ****" && \
   mkdir -p /app/bazarr && \
