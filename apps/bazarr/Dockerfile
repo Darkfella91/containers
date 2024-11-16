@@ -49,8 +49,8 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/darkfella91)\n" "${VERSION}" > /app/package_info && \
     echo "**** Setting up Python virtual environment and installing dependencies ****" && \
     python3 -m venv /app/venv && \
-    RUN PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
-    ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem && \
+    PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
+    export REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem && \
     echo "Dynamically setting REQUESTS_CA_BUNDLE to: $REQUESTS_CA_BUNDLE" && \
     /app/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
     /app/venv/bin/pip install --upgrade --no-cache-dir certifi && \
