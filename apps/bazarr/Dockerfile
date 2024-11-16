@@ -33,7 +33,8 @@ RUN \
     libpq-dev \
     libxml2-dev \
     libxslt-dev \
-    python3-dev && \
+    python3-dev \
+    py3-pip && \
   echo "**** install packages ****" && \
   apk add --no-cache \
     ffmpeg \
