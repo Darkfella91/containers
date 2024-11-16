@@ -24,8 +24,7 @@ RUN \
     libpq-dev \
     libxml2-dev \
     libxslt-dev \
-    python3-dev  \
-    py3-pip && \
+    python3-dev &&  \
   echo "**** install packages ****" && \
   apk add --no-cache \
     ca-certificates \
@@ -71,7 +70,6 @@ RUN \
   pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bazarr/bin/requirements.txt \
     -r /app/bazarr/bin/postgres-requirements.txt && \
-  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** clean up ****" && \
   apk del --purge \
