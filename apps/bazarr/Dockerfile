@@ -43,7 +43,7 @@ RUN \
   python3 -m venv /app/bazarr/venv && \
   . /app/bazarr/venv/bin/activate && \
   pip install --upgrade pip wheel && \
-  pip install --no-cache-dir \
+  pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bazarr/requirements.txt \
     -r /app/bazarr/postgres-requirements.txt && \
   deactivate && \
