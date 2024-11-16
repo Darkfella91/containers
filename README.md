@@ -107,6 +107,7 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 
 Container | Channel | Image
 --- | --- | ---
+[bazarr](https://github.com/Darkfella91/pkgs/container/bazarr) | stable | ghcr.io/Darkfella91/bazarr
 [theme-park](https://github.com/Darkfella91/pkgs/container/theme-park) | stable | ghcr.io/Darkfella91/theme-park
 
 
