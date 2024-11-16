@@ -6,7 +6,7 @@ FROM ghcr.io/linuxserver/baseimage-alpine:3.20
 ARG BUILD_DATE
 ARG VERSION
 ARG BAZARR_VERSION
-LABEL build_version="DarkfellaNET version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL build_version="DarkfellaNET version:- 1.4.5 Build-date:- 2024"
 LABEL maintainer="Darkfella"
 LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
 # hard set UTC in case the user does not define it
@@ -45,21 +45,17 @@ RUN \
   echo "**** install bazarr ****" && \
   mkdir -p \
     /app/bazarr/bin && \
-  if [ -z ${BAZARR_VERSION+x} ]; then \
-    BAZARR_VERSION=$(curl -sX GET "https://api.github.com/repos/morpheus65535/bazarr/releases/latest" \
-    | awk '/tag_name/{print $4;exit}' FS='[""]'); \
-  fi && \
   curl -o \
     /tmp/bazarr.zip -L \
-    "https://github.com/morpheus65535/bazarr/releases/download/${BAZARR_VERSION}/bazarr.zip" && \
+    "https://github.com/morpheus65535/bazarr/releases/download/v1.4.5/bazarr.zip" && \
   unzip \
     /tmp/bazarr.zip -d \
     /app/bazarr/bin && \
   rm -Rf /app/bazarr/bin/bin && \
-  echo "UpdateMethod=docker\nBranch=master\nPackageVersion=${VERSION}\nPackageAuthor=linuxserver.io" > /app/bazarr/package_info && \
+  echo "UpdateMethod=docker\nBranch=master\nPackageVersion=v1.4.5\nPackageAuthor=linuxserver.io" > /app/bazarr/package_info && \
   curl -o \
     /app/bazarr/bin/postgres-requirements.txt -L \
-    "https://raw.githubusercontent.com/morpheus65535/bazarr/${BAZARR_VERSION}/postgres-requirements.txt" && \
+    "https://raw.githubusercontent.com/morpheus65535/bazarr/v1.4.5/postgres-requirements.txt" && \
   echo "**** Install requirements ****" && \
   pip install -U --no-cache-dir \
     pip \
@@ -67,7 +63,7 @@ RUN \
   pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bazarr/bin/requirements.txt \
     -r /app/bazarr/bin/postgres-requirements.txt && \
-  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
+  printf "Linuxserver.io version: v1.4.5\nBuild-date: 2024" > /build_version && \
   echo "**** clean up ****" && \
   apk del --purge \
     build-dependencies && \
