@@ -1,8 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/goss-org/goss/master/docs/schema.yaml
+
+process:
+  python:
+    running: false
+  # Check if Python is running, should be true after Bazarr starts
+  bazarr:
+    running: true
+
 file:
-  # Check that the python binary inside the virtual environment exists
   /app/bazarr/venv/bin/python3:
     exists: true
-
-  # Check that the 'unrar' binary exists (installed from the unrar package)
   /usr/bin/unrar:
     exists: true
+
+port:
+  6767:
+    listen: true
+
+http:
+  # Assuming Bazarr has a health endpoint or default index page
+  # Replace with an actual URL if Bazarr has a health-check endpoint
+  url: http://localhost:6767
+  status: 200
+  # Optional: To test health more thoroughly, you can check the content
+  # body_contains: "Bazarr"
+
+docker:
+  # Make sure the container is up and healthy after starting it
+  container:
+    name: bazarr
+    running: true
+    healthy: true
