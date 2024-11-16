@@ -9,7 +9,6 @@ ARG CHANNEL
 # Set environment variables
 ENV PIP_NO_CACHE_DIR=1 \
     LANG=C.UTF-8 \
-    USERNAME=nobody \
     BAZARR__PORT=6767
 
 WORKDIR /app
