@@ -1,7 +1,3 @@
-process:
-  python:
-    running: true
-
 file:
   # Check that the python binary inside the virtual environment exists
   /app/bazarr/venv/bin/python3:
