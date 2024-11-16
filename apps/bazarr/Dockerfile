@@ -47,6 +47,7 @@ RUN \
     -r /app/bazarr/requirements.txt \
     -r /app/bazarr/postgres-requirements.txt && \
   deactivate && \
+  chown -R root:root /app && chmod -R 755 /app && \
   echo "**** Clean up ****" && \
   apk del --purge build-dependencies && \
   rm -rf /var/cache/apk/*
