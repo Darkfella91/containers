@@ -63,14 +63,13 @@ RUN \
   curl -o \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/${BAZARR_VERSION}/postgres-requirements.txt" && \
-  echo "**** Install requirements ****" && \
-  python3 -m venv /lsiopy && \
-  pip install -U --no-cache-dir \
-    pip \
-    wheel && \
-  pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-    -r /app/bazarr/bin/requirements.txt \
-    -r /app/bazarr/bin/postgres-requirements.txt && \
+  echo "**** set up virtual environment ****" && \
+    python3 -m venv /app/venv && \
+    . /app/venv/bin/activate && \
+    pip install --upgrade pip wheel && \
+    pip install --no-cache-dir -r /app/bazarr/bin/requirements.txt \
+        -r /app/bazarr/bin/postgres-requirements.txt && \
+    deactivate && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** clean up ****" && \
   apk del --purge \
