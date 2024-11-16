@@ -24,21 +24,9 @@ RUN \
     libpq-dev \
     libxml2-dev \
     libxslt-dev \
-    python3-dev &&  \
+    python3-dev && \
   echo "**** install packages ****" && \
   apk add --no-cache \
-    ca-certificates \
-    coreutils \
-    catatonit \
-    bash \
-    unzip \
-    jo \
-    jq \
-    libpq \
-    nano \
-    trurl \
-    curl \
-    tzdata \
     ffmpeg \
     libxml2 \
     libxslt \
