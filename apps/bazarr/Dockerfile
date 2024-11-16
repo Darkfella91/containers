@@ -43,14 +43,14 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     catatonit && \
     echo "**** Downloading and extracting Bazarr ****" && \
     curl -fsSL -o /tmp/bazarr.zip "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
-    unzip -q /tmp/bazarr.zip -d /app && \
+    unzip -q /tmp/bazarr.zip -d /app/bin && \
     rm /tmp/bazarr.zip && \
     echo "**** Setting Bazarr package info ****" && \
-    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/Darkfella91)\n" "${VERSION}" > /app/package_info && \
+    printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/darkfella91)\n" "${VERSION}" > /app/package_info && \
     echo "**** Setting up Python virtual environment and installing dependencies ****" && \
-    python3 -m venv /app/bazarr/venv && \
-    /app/bazarr/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
-    /app/bazarr/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
+    python3 -m venv /app/venv && \
+    /app/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
+    /app/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/requirements.txt \
     -r /app/postgres-requirements.txt && \
     echo "**** Cleaning up build dependencies and unnecessary files ****" && \
@@ -73,4 +73,4 @@ COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unra
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 
 # Command to run Bazarr
-CMD ["/app/bazarr/venv/bin/python3", "/app/bazarr.py", "--no-update", "--config", "/config"]
+CMD ["/app/venv/bin/python3", "/app/bin/bazarr.py", "--no-update", "--config", "/config"]
