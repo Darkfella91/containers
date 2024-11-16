@@ -55,8 +55,8 @@ RUN \
   . /app/bazarr/venv/bin/activate && \
   pip install --upgrade pip wheel && \
   pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-    -r /app/bazarr/requirements.txt \
-    -r /app/bazarr/postgres-requirements.txt && \
+    -r /app/requirements.txt \
+    -r /app/postgres-requirements.txt && \
   deactivate && \
   chown -R root:root /app && chmod -R 755 /app && \
   echo "**** Clean up ****" && \
