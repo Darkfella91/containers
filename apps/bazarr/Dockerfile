@@ -79,7 +79,12 @@ RUN \
     $HOME/.cargo \
     /tmp/*
 
+
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chown nobody:nogroup /entrypoint.sh
+
+RUN chown nobody:nogroup /usr/bin/catatonit && chmod 755 /usr/bin/catatonit
+
 COPY --from=unrar /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup
