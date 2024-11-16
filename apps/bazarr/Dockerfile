@@ -49,7 +49,11 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/darkfella91)\n" "${VERSION}" > /app/package_info && \
     echo "**** Setting up Python virtual environment and installing dependencies ****" && \
     python3 -m venv /app/venv && \
+    RUN PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
+    ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem && \
+    echo "Dynamically setting REQUESTS_CA_BUNDLE to: $REQUESTS_CA_BUNDLE" && \
     /app/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
+    /app/venv/bin/pip install --upgrade --no-cache-dir certifi && \
     /app/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bin/requirements.txt \
     -r /app/bin/postgres-requirements.txt && \
