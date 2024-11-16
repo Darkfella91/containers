@@ -45,8 +45,9 @@ RUN \
   echo "**** Download Bazarr ****" && \
   curl -fsSL -o /tmp/bazarr.zip \
     "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
-  unzip /tmp/bazarr.zip -d /app/bazarr && \
-  rm -rf /tmp/bazarr.zip && \
+  unzip -q /tmp/app.zip -d /app/bazarr \
+  && \
+  rm -rf /app/bazarr/bin \
   echo "**** Set up virtual environment and install Python dependencies ****" && \
   python3 -m venv /app/bazarr/venv && \
   . /app/bazarr/venv/bin/activate && \
@@ -58,14 +59,11 @@ RUN \
   chown -R root:root /app && chmod -R 755 /app && \
   echo "**** Clean up ****" && \
   apk del --purge build-dependencies && \
-  rm -rf /var/cache/apk/*
+  rm -rf /root/.cache /root/.cargo /tmp/*
 
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
-
-# Expose Bazarr's default port
-EXPOSE 6767
 
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
