@@ -28,9 +28,17 @@ RUN \
     ffmpeg \
     libxml2 \
     libxslt \
+    bash \
+    jo \
+    jq \
+    trurl \
+    tzdata \
+    unzip \
     mediainfo \
     python3 \
     curl \
+    coreutils \
+    ca-certificates \
     catatonit && \
   echo "**** Create Bazarr directory and user ****" && \
   mkdir -p /app/bazarr && \
