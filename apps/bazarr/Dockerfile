@@ -64,13 +64,22 @@ RUN \
     && apk del --purge .build-deps \
     && rm -rf /root/.cache /root/.cargo /tmp/*
 
+# Ensure the entrypoint script is executable and belongs to nobody:nogroup
 COPY ./apps/bazarr/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chown nobody:nogroup /entrypoint.sh
+
+# Copy unrar-alpine binary from another image
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
+# Ensure that catatonit and the app have the correct permissions
+RUN chown nobody:nogroup /usr/bin/catatonit && chmod 755 /usr/bin/catatonit
+
+# Switch to a non-root user
 USER nobody:nogroup
 WORKDIR /config
 VOLUME ["/config"]
 
+# Run the entrypoint with catatonit
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
