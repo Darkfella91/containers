@@ -45,9 +45,11 @@ RUN \
   echo "**** Download Bazarr ****" && \
   curl -fsSL -o /tmp/bazarr.zip \
     "https://github.com/morpheus65535/bazarr/releases/download/v${VERSION}/bazarr.zip" && \
-  unzip -q /tmp/bazarr.zip -d /app/bazarr \
+  unzip -q /tmp/bazarr.zip -d /app \
   && \
-  rm -rf /app/bazarr/bin \
+  rm -rf /app/bin \
+  && \
+  printf "UpdateMethod=docker\nBranch=master\nPackageVersion=%s\nPackageAuthor=[Darkfella](https://github.com/Darkfella91)\n" "${VERSION}" > /app/package_info \
   echo "**** Set up virtual environment and install Python dependencies ****" && \
   python3 -m venv /app/bazarr/venv && \
   . /app/bazarr/venv/bin/activate && \
