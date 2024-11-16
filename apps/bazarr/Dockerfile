@@ -51,7 +51,6 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     echo "**** Setting up Python virtual environment and installing dependencies ****" && \
     python3 -m venv /app/venv && \
     /app/venv/bin/pip install --upgrade --no-cache-dir pip wheel && \
-    /app/venv/bin/pip install --upgrade --no-cache-dir certifi && \
     /app/venv/bin/pip install --upgrade --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
     -r /app/bin/requirements.txt \
     -r /app/bin/postgres-requirements.txt && \
@@ -63,7 +62,6 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     chown -R root:root /app && \
     chmod -R 755 /app
 
-ENV REQUESTS_CA_BUNDLE=/app/venv/lib/python3.12/site-packages/certifi/cacert.pem
 
 USER nobody:nogroup
 
