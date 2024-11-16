@@ -13,6 +13,7 @@ ENV PIP_NO_CACHE_DIR=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
+    REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem
 
 WORKDIR /app
 
@@ -56,7 +57,6 @@ RUN echo "**** Installing build and runtime dependencies ****" && \
     -r /app/bin/postgres-requirements.txt && \
     echo "Dynamically setting REQUESTS_CA_BUNDLE to: $REQUESTS_CA_BUNDLE" && \
     PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))') && \
-    export REQUESTS_CA_BUNDLE=/app/venv/lib/python$PYTHON_VERSION/site-packages/certifi/cacert.pem && \
     echo "**** Cleaning up build dependencies and unnecessary files ****" && \
     # Clean up unnecessary dependencies and temporary files
     apk del --purge build-base cargo libffi-dev libpq-dev libxml2-dev libxslt-dev python3-dev unzip && \
