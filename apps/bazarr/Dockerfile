@@ -34,7 +34,7 @@ RUN \
     libxml2-dev \
     libxslt-dev \
     python3-dev \
-    py3-pip && \
+    pipx && \
   echo "**** install packages ****" && \
   apk add --no-cache \
     ffmpeg \
@@ -57,13 +57,9 @@ RUN \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/v1.4.5/postgres-requirements.txt" && \
   echo "**** Install requirements ****" && \
-  pip install -U --no-cache-dir setuptools && \
-  pip install -U --no-cache-dir \
-    pip \
-    wheel && \
-  pip install -U --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
-    -r /app/bazarr/bin/requirements.txt \
-    -r /app/bazarr/bin/postgres-requirements.txt && \
+  pip install --no-cache-dir --find-links https://wheel-index.linuxserver.io/alpine-3.20/ \
+        --requirement /app/bin/requirements.txt \
+        --requirement /app/bin/postgres-requirements.txt && \
   printf "Linuxserver.io version: v1.4.5\nBuild-date: 2024" > /build_version && \
   echo "**** clean up ****" && \
   apk del --purge \
