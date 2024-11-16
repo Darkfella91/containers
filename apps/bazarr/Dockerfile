@@ -57,6 +57,7 @@ RUN \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/v1.4.5/postgres-requirements.txt" && \
   echo "**** Install requirements ****" && \
+  pip install -U --no-cache-dir setuptools && \
   pip install -U --no-cache-dir \
     pip \
     wheel && \
