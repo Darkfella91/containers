@@ -7,8 +7,7 @@ ARG VERSION
 ARG CHANNEL
 
 # Set environment variables
-ENV BAZARR_VERSION=v1.4.5 \
-    PIP_NO_CACHE_DIR=1 \
+ENV PIP_NO_CACHE_DIR=1 \
     LANG=C.UTF-8 \
     USERNAME=nobody \
     BAZARR__PORT=6767
