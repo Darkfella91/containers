@@ -27,12 +27,24 @@ RUN \
     python3-dev && \
   echo "**** install packages ****" && \
   apk add --no-cache \
+    ca-certificates \
+    coreutils \
+    catatonit \
+    bash \
+    unzip \
+    jo \
+    jq \
+    libpq \
+    nano \
+    trurl \
     curl \
+    tzdata \
     ffmpeg \
     libxml2 \
     libxslt \
     mediainfo \
     python3 && \
+    py3-pip && \
   echo "**** install bazarr ****" && \
   mkdir -p \
     /app/bazarr/bin && \
