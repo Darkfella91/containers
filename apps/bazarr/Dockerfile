@@ -72,3 +72,4 @@ VOLUME ["/config"]
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/morpheus65535/bazarr"
+
