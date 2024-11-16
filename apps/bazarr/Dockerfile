@@ -46,7 +46,7 @@ RUN \
     /tmp/bazarr.zip -d \
     /app/bazarr/bin && \
   rm -Rf /app/bazarr/bin/bin && \
-  echo "UpdateMethod=docker\nBranch=master\nPackageVersion=${VERSION}\nPackageAuthor=DarkfellaNET" > /app/bazarr/package_info && \
+  echo "UpdateMethod=docker\nBranch=master\nPackageVersion=${VERSION}\nPackageAuthor=linuxserver.io" > /app/bazarr/package_info && \
   curl -o \
     /app/bazarr/bin/postgres-requirements.txt -L \
     "https://raw.githubusercontent.com/morpheus65535/bazarr/${BAZARR_VERSION}/postgres-requirements.txt" && \
