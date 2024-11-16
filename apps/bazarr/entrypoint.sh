@@ -3,7 +3,7 @@
 
 exec \
     /usr/bin/python3 \
-        /app/bin/bazarr.py \
+        /app/bazarr/bin/bazarr.py \
             --no-update \
             --config /config \
             --port ${BAZARR__PORT} \
